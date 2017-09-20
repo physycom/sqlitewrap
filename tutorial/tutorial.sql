@@ -82,7 +82,7 @@ SELECT * FROM located;
 
 -- create a new table from a csv file
 -- e.g. test.csv
--- ID,NAME,LOCATION,HAPPINESS
+-- ID,SURNAME,NAME,WORKPLACE
 -- 1,Einstein,Albert,Princeton
 -- 2,Dirac,Paul,Cambridge
 -- 3,Feynman,Richard,MIT

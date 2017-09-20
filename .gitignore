@@ -32,7 +32,9 @@
 *.app
 
 # Misc
-build/
+build*/
 *.csv
 *.db
 cmake/
+.vs/
+bin/
