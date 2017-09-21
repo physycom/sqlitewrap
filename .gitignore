@@ -32,9 +32,8 @@
 *.app
 
 # Misc
-build*/
+[Bb]uild*/
 *.csv
 *.db
-cmake/
 .vs/
-bin/
+[Bb]in/
