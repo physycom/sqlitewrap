@@ -57,6 +57,21 @@ public:
     }
   }
 
+  void add_table(const string &table_name, vector<string> &header, vector<string> &types)
+  {
+    sqlite3_free(err_msg);
+
+    string cmd;
+    cmd = "CREATE TABLE " + table_name + "(\n";
+    for (size_t i = 0; i<header.size(); ++i) cmd += header[i] + " " + types[i] + ((i == header.size() - 1) ? "" : ",") + "\n";
+    cmd += ");";
+
+    if (sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, 0, &err_msg) != SQLITE_OK)
+    {
+      cerr << "SQL_ERROR: " << err_msg << endl;
+    }
+  }
+
   void add_entry(const string &table_name, vector<string> &values)
   {
     sqlite3_free(err_msg);
@@ -66,7 +81,7 @@ public:
     for(size_t i=0; i<values.size(); ++i) cmd += "'" + values[i] + "'" + ((i==values.size()-1)?"":", ");
     cmd += ");";
 
-    if( sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, 0, &err_msg) != SQLITE_OK )
+    if( sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, NULL, &err_msg) != SQLITE_OK )
     {
       cerr << "SQL_ERROR: " << err_msg << endl;
     } 
@@ -79,6 +94,38 @@ public:
     string cmd = "SELECT * FROM " + string(table_name) + ";";
     
     if( sqlite3_exec(db, cmd.c_str(), cb, (void *) ptr, &err_msg) != SQLITE_OK )
+    {
+      cerr << "SQL_ERROR: " << err_msg << endl;
+    }
+  }
+
+  void enable_pragma_statement()
+  {
+    sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA count_changes=OFF", NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA journal_mode=MEMORY", NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA temp_store=MEMORY", NULL_CALLBACK, NULL, &err_msg);
+  }
+
+  void begin_transaction()
+  {
+    sqlite3_free(err_msg);
+
+    string cmd = "BEGIN TRANSACTION";
+
+    if (sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, NULL, &err_msg) != SQLITE_OK)
+    {
+      cerr << "SQL_ERROR: " << err_msg << endl;
+    }
+  }
+
+  void commit_transaction()
+  {
+    sqlite3_free(err_msg);
+
+    string cmd = "COMMIT TRANSACTION";
+
+    if (sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, NULL, &err_msg) != SQLITE_OK)
     {
       cerr << "SQL_ERROR: " << err_msg << endl;
     }
