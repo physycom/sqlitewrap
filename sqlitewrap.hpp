@@ -21,12 +21,26 @@ enum{
   SQLERR_GENERIC = 2
 };
 
+class table_schema
+{
+public:
+  vector<string> headers, types;
+
+  void insert(string h, string t = "TEXT NOT NULL")
+  {
+    headers.push_back(h);
+    types.push_back(t);
+  }
+};
+
 class sqlitedb
 {
   sqlite3 *db;
   char *err_msg = 0;
   
 public:
+  table_schema table;
+
   sqlitedb(const string &db_name)
   {
     if( sqlite3_open(db_name.c_str(), &db) != SQLITE_OK )
@@ -70,6 +84,11 @@ public:
     {
       cerr << "SQL_ERROR: " << err_msg << endl;
     }
+  }
+
+  void add_table(const string &table_name)
+  {
+    add_table(table_name, table.headers, table.types);
   }
 
   void add_entry(const string &table_name, vector<string> &values)
