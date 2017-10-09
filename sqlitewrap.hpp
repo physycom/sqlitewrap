@@ -99,6 +99,16 @@ public:
     }
   }
 
+  template<typename T> void custom_query(const string &table_name, const string &cmd, int(*cb)(void *, int, char **, char **), T* ptr = nullptr)
+  {
+    sqlite3_free(err_msg);
+
+    if (sqlite3_exec(db, cmd.c_str(), cb, (void *)ptr, &err_msg) != SQLITE_OK)
+    {
+      cerr << "SQL_ERROR: " << err_msg << endl;
+    }
+  }
+
   void enable_pragma_statement()
   {
     sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL_CALLBACK, NULL, &err_msg);
