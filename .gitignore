@@ -37,3 +37,4 @@
 *.db
 .vs/
 [Bb]in/
+.DS_Store

@@ -85,8 +85,6 @@ int main(int argc, char **argv)
   cout << endl;
 
   // query to update values
-  int merda=0;
-  names.clear();
   db.custom_query("csv", "SELECT * FROM csv WHERE NAME = 'Paul'", [](void *db, int col_num, char **values, char **headers)
   {
     string prefix = "UPDATE csv SET NAME = '";
@@ -98,10 +96,7 @@ int main(int argc, char **argv)
     }
     string cmd = prefix + postfix;
 
-    if (sqlite3_exec(((sqlitedb*)db)->db, cmd.c_str(), NULL_CALLBACK, NULL, &((sqlitedb*)db)->err_msg) != SQLITE_OK)
-    {
-      cerr << "SQL_ERROR: " << ((sqlitedb*)db)->err_msg << endl;
-    }
+    ((sqlitedb*)db)->custom_query<void>("csv", cmd, NULL_CALLBACK);
 
     return 0;
   }, &db);
