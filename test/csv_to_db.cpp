@@ -16,6 +16,11 @@ using namespace std;
 
 #define NULL_CALLBACK    NULL
 
+string some_external_function(char * val)
+{ 
+  return string(val) + " A. M."; 
+}
+
 enum{
   WRONG_CMDLINE = 100
 };
@@ -78,6 +83,28 @@ int main(int argc, char **argv)
   cout << "Names : ";
   for(auto n : names) cout << n << " ";
   cout << endl;
+
+  // query to update values
+  int merda=0;
+  names.clear();
+  db.custom_query("csv", "SELECT * FROM csv WHERE NAME = 'Paul'", [](void *db, int col_num, char **values, char **headers)
+  {
+    string prefix = "UPDATE csv SET NAME = '";
+    string postfix = "' WHERE ";
+    for(int i=0; i<col_num; ++i)
+    {
+      if( string(headers[i]) != "NAME" ) postfix += string(headers[i]) + " = '" + values[i] + "'" + (i==col_num-1?";":" AND ");
+      else prefix += some_external_function(values[i]);
+    }
+    string cmd = prefix + postfix;
+
+    if (sqlite3_exec(((sqlitedb*)db)->db, cmd.c_str(), NULL_CALLBACK, NULL, &((sqlitedb*)db)->err_msg) != SQLITE_OK)
+    {
+      cerr << "SQL_ERROR: " << ((sqlitedb*)db)->err_msg << endl;
+    }
+
+    return 0;
+  }, &db);
 
   return 0;
 }

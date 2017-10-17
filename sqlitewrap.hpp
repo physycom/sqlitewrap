@@ -35,10 +35,10 @@ public:
 
 class sqlitedb
 {
+public:
   sqlite3 *db;
   char *err_msg = 0;
   
-public:
   table_schema table;
 
   sqlitedb(const string &db_name)
@@ -130,10 +130,10 @@ public:
 
   void enable_pragma_statement()
   {
-    sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL_CALLBACK, NULL, &err_msg);
-    sqlite3_exec(db, "PRAGMA count_changes=OFF", NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA synchronous=OFF",     NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA count_changes=OFF",   NULL_CALLBACK, NULL, &err_msg);
     sqlite3_exec(db, "PRAGMA journal_mode=MEMORY", NULL_CALLBACK, NULL, &err_msg);
-    sqlite3_exec(db, "PRAGMA temp_store=MEMORY", NULL_CALLBACK, NULL, &err_msg);
+    sqlite3_exec(db, "PRAGMA temp_store=MEMORY",   NULL_CALLBACK, NULL, &err_msg);
   }
 
   void begin_transaction()

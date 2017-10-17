@@ -40,13 +40,15 @@ DROP TABLE fake;
 
 -- add a number of entries
 INSERT INTO people (ID,SURNAME,NAME,WORKPLACE) VALUES (1, 'Einstein', 'Albert', 'Princeton');          -- header not mandatory
-INSERT INTO people VALUES (2, 'Dirac', 'Paul', 'Cambridge' );
-INSERT INTO people VALUES (3, 'Feynman', 'Richard', 'MIT' );
-INSERT INTO people (ID,NAME,ADDRESS) VALUES (4, 'Nobody', 'Nowhere' );                                 -- but needed when some field is missing
+INSERT INTO people VALUES (2, 'Dirac', 'Paul', 'Cambridge');
+INSERT INTO people VALUES (3, 'Feynman', 'Richard', 'MIT');
+INSERT INTO people (ID,NAME,SURNAME) VALUES (4, 'Nobody', 'None');                                     -- but needed when some field is missing
 
 INSERT INTO places VALUES (1, 'Cambridge', 52.2071403, 0.1202683 );
 INSERT INTO places VALUES (2, 'Princeton', 40.3436821, -74.6534327 );
 INSERT INTO places VALUES (3, 'MIT', 42.3606659, -71.0930377 );
+
+UPDATE people SET NAME = 'Paul A. M.' WHERE NAME = 'Paul';
 
 -- remove selected entry
 DELETE FROM people WHERE name='Nobody';
