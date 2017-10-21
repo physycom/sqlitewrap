@@ -91,7 +91,7 @@ public:
     add_table(table_name, table.headers, table.types);
   }
 
-  void add_entry(const string &table_name, vector<string> &values)
+  void add_entry(const string &table_name, vector<string> values)
   {
     sqlite3_free(err_msg);
 
