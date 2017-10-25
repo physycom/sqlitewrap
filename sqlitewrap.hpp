@@ -38,7 +38,7 @@ class sqlitedb
 public:
   sqlite3 *db;
   char *err_msg = 0;
-  
+
   table_schema table;
 
   sqlitedb(const string &db_name)
@@ -49,7 +49,7 @@ public:
       sqlite3_close(db);
       exit(SQLERR_DBERR);
     }
-  }  
+  }
 
   ~sqlitedb()
   {
@@ -91,7 +91,7 @@ public:
     add_table(table_name, table.headers, table.types);
   }
 
-  void add_entry(const string &table_name, vector<string> &values)
+  void add_entry(const string &table_name, vector<string> values)
   {
     sqlite3_free(err_msg);
 
@@ -103,7 +103,7 @@ public:
     if( sqlite3_exec(db, cmd.c_str(), NULL_CALLBACK, NULL, &err_msg) != SQLITE_OK )
     {
       cerr << "SQL_ERROR: " << err_msg << endl;
-    } 
+    }
   }
 
   template<typename T> void query(const string &table_name, int (*cb)(void *, int, char **, char **), T* ptr = nullptr)
@@ -111,7 +111,7 @@ public:
     sqlite3_free(err_msg);
 
     string cmd = "SELECT * FROM " + string(table_name) + ";";
-    
+
     if( sqlite3_exec(db, cmd.c_str(), cb, (void *) ptr, &err_msg) != SQLITE_OK )
     {
       cerr << "SQL_ERROR: " << err_msg << endl;
