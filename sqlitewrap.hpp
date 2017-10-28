@@ -84,7 +84,7 @@ public:
     }
   }
 
-  void add_table(const std::string &table_name)
+  inline void add_table(const std::string &table_name)
   {
     add_table(table_name, table.headers, table.types);
   }
